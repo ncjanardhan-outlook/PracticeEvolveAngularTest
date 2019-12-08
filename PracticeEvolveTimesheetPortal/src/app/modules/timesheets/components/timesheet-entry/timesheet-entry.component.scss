@@ -1,0 +1,32 @@
+.container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.button-row {
+    flex: 0 0 auto;
+    background-color: lightgray;
+    padding: 10px;
+    display: flex;       
+}
+
+.timesheet-grid {
+    display: block;
+
+}
+
+.timesheet-table {
+    width: 100%;
+    word-wrap: break-word!important;
+    table-layout: fixed!important;
+    padding: 2px;
+    border-collapse: collapse;
+    border: 1px solid #E8E8E8;
+}
+
+th, td {
+    border-left: 1px solid lightgray;
+    border-bottom: 1px solid lightgray;
+    padding: 4px;
+  }

@@ -1,0 +1,100 @@
+<div class="container">
+    <div class="button-row">
+        <div>
+            <button [disabled]="doesNewEntryExist()" (click)="onNew()">
+                New
+            </button>
+            <button [disabled]="isAnyRowBeingEdited()" (click)="onSubmit()">
+                Submit
+            </button>
+        </div>
+        <div style="margin-left: auto">
+            Default Hourly Rate:
+            <input type="number" [(ngModel)]="defaultHourlyRate" />
+        </div>
+    </div>
+
+    <div class="timesheet-grid">
+        <table class="timesheet-table">
+            <thead>
+                <tr>
+                    <th>State</th>
+                    <th>Title</th>
+                    <th>Type</th>
+                    <th>Duration</th>
+                    <th>Hourly Rate</th>
+                    <th>Total</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let entry of existingTimesheetEntries; let rowIndex=index;">
+                    <td>
+                        <div>
+                            {{entry.state}}
+                        </div>
+                    </td>
+                    <td>
+                        <div *ngIf="entry.state=='Submitted' || entry.state == 'Active'">
+                            {{entry.title}}
+                        </div>
+                        <div *ngIf="entry.state=='New' || entry.state == 'Edited'">
+                            <input type="text"
+                                [formControl]="timeSheetEntriesFormGroup.get('timesheetEntries').at(rowIndex).get('title')" />
+                        </div>
+                    </td>
+                    <td>
+                        <div *ngIf="entry.state=='Submitted' || entry.state == 'Active'">
+                            {{entry.type}}
+                        </div>
+                        <div *ngIf="entry.state=='New' || entry.state == 'Edited'">
+                            <select
+                                [formControl]="timeSheetEntriesFormGroup.get('timesheetEntries').at(rowIndex).get('type')">
+                                <option value="Research">Research</option>
+                                <option value="Telephone Call">Telephone Call</option>
+                                <option value="Drafting Document">Drafting Document</option>
+                            </select>
+                        </div>
+                    </td>
+                    <td>
+                        <div *ngIf="entry.state=='Submitted' || entry.state == 'Active'">
+                            {{entry.durationInHours}} : {{entry.durationInMinutes}}
+                        </div>
+                        <div *ngIf="entry.state=='New' || entry.state == 'Edited'">
+                            <input type="number" min="0" max="23" placeholder="00"
+                                [formControl]="timeSheetEntriesFormGroup.get('timesheetEntries').at(rowIndex).get('durationInHours')">:
+                            <input type="number" min="0" max="59" placeholder="00"
+                                [formControl]="timeSheetEntriesFormGroup.get('timesheetEntries').at(rowIndex).get('durationInMinutes')">
+                        </div>
+                    </td>
+                    <td>
+                        <div *ngIf="entry.state=='Submitted' || entry.state == 'Active'">
+                            {{entry.hourlyRate}}
+                        </div>
+                        <div *ngIf="entry.state=='New' || entry.state == 'Edited'">
+                            <input type="number" min="0"
+                                [formControl]="timeSheetEntriesFormGroup.get('timesheetEntries').at(rowIndex).get('hourlyRate')">
+                        </div>
+                    </td>
+                    <td>
+                        <div>
+                            {{entry.total}}
+                        </div>
+                    </td>
+                    <td>
+                        <div *ngIf="entry.state == 'Active'">
+                            <button (click)="onEditItem(rowIndex)">Edit</button>
+                            <button (click)="onDeleteItem(rowIndex)">Delete</button>
+                        </div>
+                        <div *ngIf="entry.state == 'New' || entry.state == 'Edited'">
+                            <button
+                                [disabled]="timeSheetEntriesFormGroup.get('timesheetEntries').at(rowIndex).valid == false"
+                                (click)="onSaveItem(rowIndex)">Save</button>
+                            <button (click)="onCancelItem(rowIndex)">Cancel</button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
